@@ -12,16 +12,16 @@ typedef struct
   const char *data;
 } Pyc_CharSpan;
 
-Pyc_CharSpan Pyc_CharSpan_from_cstr(const char *cstr);
+Pyc_CharSpan pyc_charspan_from_cstr(const char *cstr);
 
-Pyc_CharSpan Pyc_CharSpan_subspan(Pyc_CharSpan span, size_t index, size_t size);
+Pyc_CharSpan pyc_charspan_subspan(Pyc_CharSpan span, size_t index, size_t size);
 
-int Pyc_CharSpan_compare(Pyc_CharSpan x, Pyc_CharSpan y);
+int pyc_charspan_compare(Pyc_CharSpan x, Pyc_CharSpan y);
 
-int Pyc_CharSpan_compare_cstr(Pyc_CharSpan x, const char *cstr);
+int pyc_charspan_compare_cstr(Pyc_CharSpan x, const char *cstr);
 
-int64_t Pyc_CharSpan_to_int(Pyc_CharSpan span);
+int64_t pyc_charspan_to_int(Pyc_CharSpan span);
 
-const char *Pyc_CharSpan_to_cstr(Pyc_Arena *arena, Pyc_CharSpan span);
+const char *pyc_charspan_to_cstr(Pyc_Arena *arena, Pyc_CharSpan span);
 
 #endif // PYC_STRINGUTIL_H

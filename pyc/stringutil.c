@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-Pyc_CharSpan Pyc_CharSpan_from_cstr(const char *cstr)
+Pyc_CharSpan pyc_charspan_from_cstr(const char *cstr)
 {
   size_t size = strlen(cstr);
   Pyc_CharSpan span = {0};
@@ -13,7 +13,7 @@ Pyc_CharSpan Pyc_CharSpan_from_cstr(const char *cstr)
   return span;
 }
 
-Pyc_CharSpan Pyc_CharSpan_subspan(
+Pyc_CharSpan pyc_charspan_subspan(
     Pyc_CharSpan span,
     size_t index,
     size_t size)
@@ -43,7 +43,7 @@ int Pyc_CharSpan_equals_cstr(Pyc_CharSpan x, const char *cstr)
   return strncmp(x.data, cstr, min_size);
 }
 
-int64_t Pyc_CharSpan_to_int(Pyc_CharSpan span)
+int64_t pyc_charspan_to_int(Pyc_CharSpan span)
 {
   int64_t value = 0;
   size_t index = span.size - 1;
@@ -64,9 +64,9 @@ int64_t Pyc_CharSpan_to_int(Pyc_CharSpan span)
   return value;
 }
 
-const char *Pyc_CharSpan_to_cstr(Pyc_Arena *arena, Pyc_CharSpan span)
+const char *pyc_charspan_to_cstr(Pyc_Arena *arena, Pyc_CharSpan span)
 {
-  char *cstr = Pyc_Arena_alloc(arena, span.size + 1);
+  char *cstr = pyc_arena_alloc(arena, span.size + 1);
   strncpy(cstr, span.data, span.size);
   cstr[span.size] = '\0';
   return cstr;

@@ -1,8 +1,8 @@
 #include "lexer.h"
 #include "arena.h"
+#include "parser.h"
 
 #include <stdio.h>
-#include <string.h>
 
 void print_lexeme(Pyc_Arena *arena, Pyc_Lexeme lexeme)
 {
@@ -15,7 +15,7 @@ void print_lexeme(Pyc_Arena *arena, Pyc_Lexeme lexeme)
     printf("OPERATOR(%c)\n", lexeme.op.data[0]);
     break;
   case Pyc_Lexeme_Name:
-    printf("NAME(%s)\n", Pyc_CharSpan_to_cstr(arena, lexeme.name));
+    printf("NAME(%s)\n", pyc_charspan_to_cstr(arena, lexeme.name));
     break;
   case Pyc_Lexeme_Eof:
     printf("EOF\n");
@@ -26,18 +26,13 @@ void print_lexeme(Pyc_Arena *arena, Pyc_Lexeme lexeme)
 int main()
 {
   Pyc_Arena arena = {0};
-  Pyc_Arena_init(&arena, 1024 * 1024);
+  pyc_arena_init(&arena, 1024 * 1024);
 
-  Pyc_Lexer lexer = Pyc_Lexer_init("name(30*40+2)");
+  Pyc_Ast *ast = pyc_parse(&arena, "print(10)");
+  
+  pyc_ast_dump(&arena, stdout, ast);
 
-  Pyc_Lexeme lexeme;
-  do
-  {
-    lexeme = Pyc_Lexer_next(&lexer);
-    print_lexeme(&arena, lexeme);
-  } while (lexeme.type != Pyc_Lexeme_Eof);
-
-  Pyc_Arena_free(&arena);
+  pyc_arena_free(&arena);
 
   return 0;
 }

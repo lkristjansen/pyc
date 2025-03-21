@@ -9,10 +9,10 @@ typedef struct {
   size_t size;
 } Pyc_Arena;
 
-void Pyc_Arena_init(Pyc_Arena *arena, size_t size);
+void pyc_arena_init(Pyc_Arena *arena, size_t size);
 
-void *Pyc_Arena_alloc(Pyc_Arena *arena, size_t size);
+void *pyc_arena_alloc(Pyc_Arena *arena, size_t size);
 
-void Pyc_Arena_free(Pyc_Arena *arena);
+void pyc_arena_free(Pyc_Arena *arena);
   
 #endif // PYC_ARENA_H

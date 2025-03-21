@@ -42,8 +42,8 @@ static Pyc_Lexeme lex_fixnum(Pyc_Lexer *lexer)
     next(lexer);
 
   size_t size = lexer->index - start_index;
-  Pyc_CharSpan fixnum = Pyc_CharSpan_subspan(lexer->text, start_index, size);
-  return make_fixnum(Pyc_CharSpan_to_int(fixnum));
+  Pyc_CharSpan fixnum = pyc_charspan_subspan(lexer->text, start_index, size);
+  return make_fixnum(pyc_charspan_to_int(fixnum));
 }
 
 Pyc_Lexeme lex_operator(Pyc_Lexer *lexer)
@@ -69,7 +69,7 @@ Pyc_Lexeme lex_name(Pyc_Lexer *lexer)
     next(lexer);
 
   size_t size = lexer->index - start_index;
-  Pyc_CharSpan name = Pyc_CharSpan_subspan(lexer->text, start_index, size);
+  Pyc_CharSpan name = pyc_charspan_subspan(lexer->text, start_index, size);
   return make_name(name);
 }
 
@@ -89,7 +89,7 @@ static Pyc_Lexeme lex_right_paren(Pyc_Lexer *lexer)
   return lexeme;
 }
 
-Pyc_Lexeme Pyc_Lexer_next(Pyc_Lexer *lexer)
+Pyc_Lexeme pyc_lexer_next(Pyc_Lexer *lexer)
 {
   if (is_empty(lexer))
     return make_eof();
@@ -101,7 +101,7 @@ Pyc_Lexeme Pyc_Lexer_next(Pyc_Lexer *lexer)
 
   if (isdigit(ch))
     return lex_fixnum(lexer);
-  else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+  else if (ch == '+' || ch == '-')
     return lex_operator(lexer);
   else if (isalpha(ch))
     return lex_name(lexer);
@@ -110,19 +110,19 @@ Pyc_Lexeme Pyc_Lexer_next(Pyc_Lexer *lexer)
   else if (ch == ')')
     return lex_right_paren(lexer);
 
-  fprintf(stderr, "unexpected token '%c'.\n", ch);
+  fprintf(stderr, "error: unexpected token '%c'.\n", ch);
   exit(EXIT_FAILURE);
 }
 
-Pyc_Lexer Pyc_Lexer_init(const char *text)
+Pyc_Lexer pyc_lexer_init(const char *text)
 {
   Pyc_Lexer lexer = {0};
   lexer.index = 0;
-  lexer.text = Pyc_CharSpan_from_cstr(text);
+  lexer.text = pyc_charspan_from_cstr(text);
   return lexer;
 }
 
-Pyc_Lexeme Pyc_Lexer_peek(Pyc_Lexer lexer)
+Pyc_Lexeme pyc_lexer_peek(Pyc_Lexer lexer)
 {
-  return Pyc_Lexer_next(&lexer);
+  return pyc_lexer_next(&lexer);
 }

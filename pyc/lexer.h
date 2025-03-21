@@ -35,10 +35,10 @@ typedef struct
   Pyc_CharSpan text;
 } Pyc_Lexer;
 
-Pyc_Lexer Pyc_Lexer_init(const char *text);
+Pyc_Lexer pyc_lexer_init(const char *text);
 
-Pyc_Lexeme Pyc_Lexer_next(Pyc_Lexer *lexer);
+Pyc_Lexeme pyc_lexer_next(Pyc_Lexer *lexer);
 
-Pyc_Lexeme Pyc_Lexer_peek(Pyc_Lexer lexer);
+Pyc_Lexeme pyc_lexer_peek(Pyc_Lexer lexer);
 
 #endif // PYC_LEXER_H

@@ -1,4 +1,4 @@
-CFLAGS += -std=c11 -Wall -Wextra -g -fsanitize=address -static-libasan
+CFLAGS += -std=c17 -Wall -Wextra -g -fsanitize=address -static-libasan
 CPPFLAGS += 
 
 PYC_SOURCES := $(shell find pyc -name '*.c')

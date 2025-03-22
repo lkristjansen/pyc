@@ -1,12 +1,13 @@
 #include "arena.h"
 #include "parser.h"
+#include "emitter.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <getopt.h>
 
-void usage(const char *name)
+static void pyc_print_usage(const char *name)
 {
   fprintf(stderr, "Usage: %s [OPTIONS] <input file>\n\n", name);
   fprintf(stderr, "\t-o <output file>\n\t\tif no output file is specified use stdout.\n");
@@ -23,7 +24,7 @@ typedef struct
   const char *infile;
 } Pyc_Options;
 
-static Pyc_Options parse_options(int argc, char **argv)
+static Pyc_Options pyc_parse_options(int argc, char **argv)
 {
   Pyc_Options options = {0};
 
@@ -42,10 +43,10 @@ static Pyc_Options parse_options(int argc, char **argv)
       options.compile = 1;
       break;
     case 'h':
-      usage(argv[0]);
+      pyc_print_usage(argv[0]);
       exit(EXIT_SUCCESS);
     default:
-      usage(argv[0]);
+      pyc_print_usage(argv[0]);
       exit(EXIT_FAILURE);
     }
   }
@@ -53,7 +54,7 @@ static Pyc_Options parse_options(int argc, char **argv)
   if (optind >= argc)
   {
     fprintf(stderr, "Argument error: missing input file name.\n");
-    usage(argv[0]);
+    pyc_print_usage(argv[0]);
     exit(EXIT_FAILURE);
   }
 
@@ -88,13 +89,29 @@ int main(int argc, char **argv)
   Pyc_Arena arena = {0};
   pyc_arena_init(&arena, 1024 * 1024);
 
-  Pyc_Options options = parse_options(argc, argv);
+  Pyc_Options options = pyc_parse_options(argc, argv);
+
   const char *text = pyc_read_all(&arena, options.infile);
 
   Pyc_Ast *ast = pyc_parse(&arena, text);
 
   if (options.dump_ast)
     pyc_ast_dump(&arena, stdout, ast);
+
+  FILE *outfile = stdout;
+  if (options.outfile != NULL)
+  {
+    outfile = fopen(options.outfile, "w");
+
+    if (outfile == NULL)
+    {
+      fprintf(stderr, "failed to open file: %s\n", options.outfile);
+      exit(EXIT_FAILURE);
+    }
+  }
+
+  if (options.compile)
+    pyc_emit(outfile, ast);
 
   pyc_arena_free(&arena);
 

@@ -41,4 +41,6 @@ Pyc_Lexeme pyc_lexer_next(Pyc_Lexer *lexer);
 
 Pyc_Lexeme pyc_lexer_peek(Pyc_Lexer lexer);
 
+void pyc_lexeme_print(Pyc_Arena *arena, Pyc_Lexeme lexeme);
+
 #endif // PYC_LEXER_H

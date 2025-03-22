@@ -46,7 +46,7 @@ static Pyc_Lexeme lex_fixnum(Pyc_Lexer *lexer)
   return make_fixnum(pyc_charspan_to_int(fixnum));
 }
 
-Pyc_Lexeme lex_operator(Pyc_Lexer *lexer)
+static Pyc_Lexeme lex_operator(Pyc_Lexer *lexer)
 {
   Pyc_CharSpan op = {0};
   op.data = lexer->text.data + lexer->index;
@@ -60,7 +60,7 @@ Pyc_Lexeme lex_operator(Pyc_Lexer *lexer)
   return lexeme;
 }
 
-Pyc_Lexeme lex_name(Pyc_Lexer *lexer)
+static Pyc_Lexeme lex_name(Pyc_Lexer *lexer)
 {
   size_t start_index = lexer->index;
   next(lexer);
@@ -125,4 +125,23 @@ Pyc_Lexer pyc_lexer_init(const char *text)
 Pyc_Lexeme pyc_lexer_peek(Pyc_Lexer lexer)
 {
   return pyc_lexer_next(&lexer);
+}
+
+void pyc_lexeme_print(Pyc_Arena *arena, Pyc_Lexeme lexeme)
+{
+  switch (lexeme.type)
+  {
+  case Pyc_Lexeme_Fixnum:
+    printf("FIXNUM(%ld)\n", lexeme.fixnum);
+    break;
+  case Pyc_Lexeme_Operator:
+    printf("OPERATOR(%c)\n", lexeme.op.data[0]);
+    break;
+  case Pyc_Lexeme_Name:
+    printf("NAME(%s)\n", pyc_charspan_to_cstr(arena, lexeme.name));
+    break;
+  case Pyc_Lexeme_Eof:
+    printf("EOF\n");
+    break;
+  }
 }
